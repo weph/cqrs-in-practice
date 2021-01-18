@@ -6,13 +6,18 @@ use thephpcc\cqrs\EventStoreStub;
 
 require __DIR__ . '/src/autoload.php';
 
-$eventStore = EventStoreStub::load();
+while (true) {
+    $eventStore = EventStoreStub::load();
 
-$board = new DepartureInformationBoard;
-$projector = new Projector($board);
+    $board     = new DepartureInformationBoard;
+    $projector = new Projector($board);
 
-foreach ($eventStore->all() as $event) {
-    $projector->handle($event);
+    foreach ($eventStore->all() as $event) {
+        $projector->handle($event);
+    }
+
+    system('clear');
+    print $board->asString() . PHP_EOL;
+
+    sleep(3);
 }
-
-print $board->asString() . PHP_EOL;

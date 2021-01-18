@@ -7,6 +7,7 @@ spl_autoload_register(
         static $classes = null;
         if ($classes === null) {
             $classes = array(
+                'thephpcc\\cqrs\\boardingstartedevent' => '/BoardingStartedEvent.php',
                 'thephpcc\\cqrs\\departureboard\\departureinformationboard' => '/DepartureInformationBoard.php',
                 'thephpcc\\cqrs\\departureboard\\flight' => '/Flight.php',
                 'thephpcc\\cqrs\\departureboard\\projector' => '/Projector.php',
@@ -15,6 +16,7 @@ spl_autoload_register(
                 'thephpcc\\cqrs\\eventstorestub' => '/EventStoreStub.php',
                 'thephpcc\\cqrs\\flightcancelledevent' => '/FlightCancelledEvent.php',
                 'thephpcc\\cqrs\\flightscheduledevent' => '/FlightScheduledEvent.php',
+                'thephpcc\\cqrs\\gatechangedevent' => '/GateChangedEvent.php',
                 'thephpcc\\cqrs\\helloworld' => '/HelloWorld.php'
             );
         }

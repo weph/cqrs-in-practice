@@ -2,9 +2,11 @@
 
 namespace thephpcc\cqrs\departureboard;
 
+use thephpcc\cqrs\BoardingStartedEvent;
 use thephpcc\cqrs\Event;
 use thephpcc\cqrs\FlightCancelledEvent;
 use thephpcc\cqrs\FlightScheduledEvent;
+use thephpcc\cqrs\GateChangedEvent;
 
 class Projector
 {
@@ -20,13 +22,23 @@ class Projector
         switch (get_class($event)) {
 
             case FlightScheduledEvent::class:
-                assert($event instanceOf FlightScheduledEvent);
+                assert($event instanceof FlightScheduledEvent);
                 $this->handleFlightScheduledEvent($event);
                 break;
 
             case FlightCancelledEvent::class:
-                assert($event instanceOf FlightCancelledEvent);
+                assert($event instanceof FlightCancelledEvent);
                 $this->handleFlightCancelledEvent($event);
+                break;
+
+            case GateChangedEvent::class:
+                assert($event instanceof GateChangedEvent);
+                $this->handleGateChangedEvent($event);
+                break;
+
+            case BoardingStartedEvent::class:
+                assert($event instanceof BoardingStartedEvent);
+                $this->handleBoardingStartedEvent($event);
                 break;
         }
     }
@@ -37,7 +49,8 @@ class Projector
             new Flight(
                 $event->date(),
                 $event->flightNumber(),
-                $event->destination()
+                $event->destination(),
+                $event->gate()
             )
         );
     }
@@ -45,5 +58,15 @@ class Projector
     private function handleFlightCancelledEvent(FlightCancelledEvent $event): void
     {
         $this->board->cancelFlight($event->flightNumber());
+    }
+
+    private function handleGateChangedEvent(GateChangedEvent $event): void
+    {
+        $this->board->changeGate($event->flightNumber(), $event->gate());
+    }
+
+    private function handleBoardingStartedEvent(BoardingStartedEvent $event): void
+    {
+        $this->board->startBoarding($event->flightNumber());
     }
 }
